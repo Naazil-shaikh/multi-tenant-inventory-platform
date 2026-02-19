@@ -23,6 +23,28 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// api.interceptors.request.use((config) => {
+//   const state = store.getState();
+
+//   if (!state.auth?.accessToken) {
+//     const stored = JSON.parse(localStorage.getItem("auth-storage"));
+//     const token = stored?.state?.accessToken;
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+//   }
+
+//   if (!state.tenant?.activeTenant) {
+//     const stored = JSON.parse(localStorage.getItem("tenant-storage"));
+//     const tenantId = stored?.state?.activeTenant?._id;
+//     if (tenantId) {
+//       config.headers["X-Tenant-Id"] = tenantId;
+//     }
+//   }
+
+//   return config;
+// });
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -47,7 +69,7 @@ api.interceptors.response.use(
       store.dispatch(forceLogout());
       return Promise.reject(refreshError);
     }
-  }
+  },
 );
 
 export default api;

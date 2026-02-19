@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { forceLogout } from "./authSlice";
 
+/* =========================
+   HYDRATE FROM LOCALSTORAGE
+========================= */
 const getInitialTenantState = () => {
   try {
     const stored = localStorage.getItem("activeTenant");
@@ -8,19 +11,8 @@ const getInitialTenantState = () => {
 
     const parsed = JSON.parse(stored);
 
-    if (
-      !parsed?._id ||
-      !parsed?.tenantName ||
-      !parsed?.plan ||
-      !parsed?.status ||
-      !parsed?.role
-    ) {
-      return null;
-    }
-
-    if (parsed.status === "suspended") {
-      return null;
-    }
+    // Only require _id for header attachment
+    if (!parsed?._id) return null;
 
     return parsed;
   } catch {
@@ -47,13 +39,8 @@ const tenantSlice = createSlice({
     setActiveTenant(state, action) {
       const tenant = action.payload;
 
-      if (
-        !tenant?._id ||
-        !tenant?.tenantName ||
-        !tenant?.plan ||
-        !tenant?.status ||
-        !tenant?.role
-      ) {
+      // 🔥 Only require _id
+      if (!tenant?._id) {
         state.error = "Invalid tenant payload";
         return;
       }
@@ -65,16 +52,10 @@ const tenantSlice = createSlice({
         return;
       }
 
-      state.activeTenant = {
-        _id: tenant._id,
-        tenantName: tenant.tenantName,
-        plan: tenant.plan,
-        status: tenant.status,
-        role: tenant.role,
-      };
-
+      state.activeTenant = tenant;
       state.error = null;
-      localStorage.setItem("activeTenant", JSON.stringify(state.activeTenant));
+
+      localStorage.setItem("activeTenant", JSON.stringify(tenant));
     },
 
     clearActiveTenant(state) {
