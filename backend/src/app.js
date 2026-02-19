@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { standardRateLimiter } from "./middlewares/rateLimiter.milleware.js";
 
 const app = express();
 
@@ -58,7 +59,6 @@ import inventoryAlertRouter from "./routes/inventoryAlert.routes.js";
 import dashboardRouter from "./routes/dashboard.routes.js";
 import debugRouter from "./routes/debug.routes.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
-import { standardRateLimiter } from "./middlewares/rateLimiter.milleware.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/tenants", tenantRouter);
