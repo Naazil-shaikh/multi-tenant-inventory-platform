@@ -40,8 +40,8 @@ const generateAccessAndRefreshToken = async (userId) => {
 // };
 const options = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "strict",
+  secure: true, // must be true in production (HTTPS)
+  sameSite: "none", // required for cross-origin
 };
 
 const registerUser = asyncHandler(async (req, res) => {
