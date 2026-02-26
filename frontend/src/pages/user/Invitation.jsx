@@ -48,7 +48,7 @@ export default function Invitations() {
       setProcessingToken(inviteToken);
       await rejectInvite(inviteToken);
       setInvitations((prev) =>
-        prev.filter((i) => i.inviteToken !== inviteToken)
+        prev.filter((i) => i.inviteToken !== inviteToken),
       );
     } catch {
       setError("Failed to reject invitation");

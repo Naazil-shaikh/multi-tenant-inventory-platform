@@ -1,4 +1,4 @@
-import { User, Lock } from "lucide-react";
+import { User, Lock, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -20,18 +20,13 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     dispatch(loginStart());
-
     try {
       const payload = identifier.includes("@")
         ? { email: identifier, password }
         : { username: identifier, password };
-
       const res = await loginUser(payload);
-
       const { user, accessToken } = res.data.data;
-
       dispatch(
         loginSuccess({
           user: {
@@ -42,83 +37,120 @@ export default function Login() {
             avatar: user.avatar,
           },
           accessToken,
-        })
+        }),
       );
-
       navigate("/tenants/select");
     } catch (error) {
       dispatch(
-        loginFailure(error.response?.data?.message || "Invalid credentials")
+        loginFailure(error.response?.data?.message || "Invalid credentials"),
       );
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white rounded-lg shadow p-6">
-        <div className="mb-6 text-center">
-          <h1 className="text-2xl font-semibold text-gray-900">Login</h1>
-          <p className="text-sm text-gray-500">Access your account</p>
-        </div>
-
-        {authError && (
-          <div className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded p-2">
-            {authError}
-          </div>
-        )}
-
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Email or Username
-            </label>
-            <div className="relative">
-              <User className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                value={identifier}
-                onChange={(e) => setIdentifier(e.target.value)}
-                placeholder="email or username"
-                className="w-full pl-9 pr-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full pl-9 pr-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
-                required
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2 rounded-md bg-black text-white text-sm hover:bg-gray-800 disabled:opacity-60 cursor-pointer"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-sm text-gray-600">
-          Don’t have an account?{" "}
-          <span
-            onClick={() => navigate("/register")}
-            className="text-blue-600 cursor-pointer hover:underline cursor-pointer"
-          >
-            Register
-          </span>
-        </div>
+    <div className="w-full">
+      {/* Heading */}
+      <div className="mb-8">
+        <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2">
+          Secure access
+        </p>
+        <h1 className="text-3xl font-semibold text-zinc-900 tracking-tight">
+          Welcome back.
+        </h1>
       </div>
+
+      {/* Error */}
+      {authError && (
+        <div className="mb-6 px-4 py-3 rounded-lg bg-red-50 border border-red-200 border-l-[3px] border-l-red-500 text-sm text-red-700">
+          {authError}
+        </div>
+      )}
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="space-y-1.5">
+          <label className="block text-xs font-semibold uppercase tracking-widest text-zinc-400">
+            Email or Username
+          </label>
+          <div className="relative">
+            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 pointer-events-none" />
+            <input
+              type="text"
+              value={identifier}
+              onChange={(e) => setIdentifier(e.target.value)}
+              placeholder="you@company.com"
+              required
+              className="w-full pl-10 pr-4 py-3 rounded-lg border border-zinc-200 bg-white text-sm text-zinc-900 placeholder:text-zinc-300 outline-none focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10 transition-colors"
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-xs font-semibold uppercase tracking-widest text-zinc-400">
+            Password
+          </label>
+          <div className="relative">
+            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 pointer-events-none" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••••"
+              required
+              className="w-full pl-10 pr-4 py-3 rounded-lg border border-zinc-200 bg-white text-sm text-zinc-900 placeholder:text-zinc-300 outline-none focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10 transition-colors"
+            />
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-zinc-900 text-white text-sm font-medium hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mt-1"
+        >
+          {loading ? (
+            <>
+              <svg
+                className="animate-spin w-4 h-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"
+                />
+              </svg>
+              Signing in…
+            </>
+          ) : (
+            <>
+              Sign in
+              <ArrowRight className="w-4 h-4" />
+            </>
+          )}
+        </button>
+      </form>
+
+      <div className="my-7 border-t border-zinc-100" />
+
+      <p className="text-sm text-zinc-400 text-center">
+        No account?{" "}
+        <button
+          onClick={() => navigate("/register")}
+          className="text-zinc-900 font-medium underline underline-offset-4 hover:text-zinc-600 transition-colors"
+        >
+          Create one
+        </button>
+      </p>
     </div>
   );
 }

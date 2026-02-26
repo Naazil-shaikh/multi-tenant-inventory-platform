@@ -7,7 +7,15 @@ import {
 } from "../../store/slices/authSlice";
 import { registerUser } from "../../api/user.api";
 import { useState } from "react";
-import { User, Mail, Lock, Image, ImagePlus, AlertCircle } from "lucide-react";
+import {
+  User,
+  Mail,
+  Lock,
+  Image,
+  ImagePlus,
+  ArrowRight,
+  AlertCircle,
+} from "lucide-react";
 
 export default function Register() {
   const dispatch = useDispatch();
@@ -20,13 +28,11 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
-
   const [formError, setFormError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
-
     dispatch(loginStart());
 
     try {
@@ -36,10 +42,7 @@ export default function Register() {
       formData.append("username", username);
       formData.append("password", password);
       formData.append("avatar", avatar);
-
-      if (coverImage) {
-        formData.append("coverImage", coverImage);
-      }
+      if (coverImage) formData.append("coverImage", coverImage);
 
       const res = await registerUser(formData);
       const { user, accessToken } = res.data.data;
@@ -54,7 +57,7 @@ export default function Register() {
             avatar: user.avatar,
           },
           accessToken,
-        })
+        }),
       );
 
       navigate("/tenants/select");
@@ -63,97 +66,121 @@ export default function Register() {
         error.response?.data?.message ||
         error.response?.data?.error ||
         "Registration failed. Please try again.";
-
       setFormError(message);
       dispatch(loginFailure(message));
     }
   };
 
+  const inputClass =
+    "w-full pl-10 pr-4 py-3 rounded-lg border border-zinc-200 bg-white text-sm text-zinc-900 placeholder:text-zinc-300 outline-none focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10 transition-colors";
+
+  const iconClass =
+    "absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 pointer-events-none";
+
+  const labelClass =
+    "block text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-1.5";
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white rounded-lg shadow p-6">
-        <div className="mb-4 text-center">
-          <h1 className="text-2xl font-semibold text-gray-900">
-            Create Account
-          </h1>
-          <p className="text-sm text-gray-500">Register to get started</p>
+    <div className="w-full">
+      {/* Heading */}
+      <div className="mb-8">
+        <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2">
+          Get started
+        </p>
+        <h1 className="text-3xl font-semibold text-zinc-900 tracking-tight">
+          Create account.
+        </h1>
+      </div>
+
+      {/* Error */}
+      {formError && (
+        <div className="mb-6 flex items-start gap-2.5 px-4 py-3 rounded-lg bg-red-50 border border-red-200 border-l-[3px] border-l-red-500 text-sm text-red-700">
+          <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+          <span>{formError}</span>
+        </div>
+      )}
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Full Name */}
+        <div>
+          <label className={labelClass}>Full Name</label>
+          <div className="relative">
+            <User className={iconClass} />
+            <input
+              type="text"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="John Doe"
+              required
+              className={inputClass}
+            />
+          </div>
         </div>
 
-        {formError && (
-          <div className="mb-4 flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-            <AlertCircle className="h-4 w-4 mt-0.5" />
-            <span>{formError}</span>
+        {/* Email */}
+        <div>
+          <label className={labelClass}>Email</label>
+          <div className="relative">
+            <Mail className={iconClass} />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="john@company.com"
+              required
+              className={inputClass}
+            />
           </div>
-        )}
+        </div>
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <div>
-            <label className="block text-sm font-medium mb-1">Full Name</label>
-            <div className="relative">
-              <User className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="John Doe"
-                className="w-full pl-9 pr-3 py-2 border rounded-md text-sm"
-                required
-              />
-            </div>
+        {/* Username */}
+        <div>
+          <label className={labelClass}>Username</label>
+          <div className="relative">
+            <User className={iconClass} />
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="john_doe"
+              required
+              className={inputClass}
+            />
           </div>
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="john@example.com"
-                className="w-full pl-9 pr-3 py-2 border rounded-md text-sm"
-                required
-              />
-            </div>
+        {/* Password */}
+        <div>
+          <label className={labelClass}>Password</label>
+          <div className="relative">
+            <Lock className={iconClass} />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••••"
+              required
+              className={inputClass}
+            />
           </div>
+        </div>
 
+        {/* Avatar + Cover — side by side */}
+        <div className="grid grid-cols-2 gap-3 pt-1">
+          {/* Avatar */}
           <div>
-            <label className="block text-sm font-medium mb-1">Username</label>
-            <div className="relative">
-              <User className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="john_doe"
-                className="w-full pl-9 pr-3 py-2 border rounded-md text-sm"
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full pl-9 pr-3 py-2 border rounded-md text-sm"
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Avatar (required)
+            <label className={labelClass}>
+              Avatar{" "}
+              <span className="text-red-400 normal-case tracking-normal">
+                *
+              </span>
             </label>
-            <label className="flex items-center gap-2 px-3 py-2 border rounded-md cursor-pointer text-sm">
-              <Image className="h-4 w-4 text-gray-500" />
-              <span>{avatar ? avatar.name : "Upload avatar"}</span>
+            <label className="flex flex-col items-center justify-center gap-2 py-4 rounded-lg border border-dashed border-zinc-300 bg-zinc-50 hover:bg-zinc-100 hover:border-zinc-400 cursor-pointer transition-colors group">
+              <Image className="w-5 h-5 text-zinc-400 group-hover:text-zinc-600 transition-colors" />
+              <span className="text-xs text-zinc-400 group-hover:text-zinc-600 transition-colors text-center leading-tight px-2 truncate w-full text-center">
+                {avatar ? avatar.name : "Upload avatar"}
+              </span>
               <input
                 type="file"
                 accept="image/*"
@@ -164,13 +191,19 @@ export default function Register() {
             </label>
           </div>
 
+          {/* Cover Image */}
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Cover Image (optional)
+            <label className={labelClass}>
+              Cover{" "}
+              <span className="text-zinc-300 normal-case tracking-normal">
+                (opt)
+              </span>
             </label>
-            <label className="flex items-center gap-2 px-3 py-2 border rounded-md cursor-pointer text-sm">
-              <ImagePlus className="h-4 w-4 text-gray-500" />
-              <span>{coverImage ? coverImage.name : "Upload cover image"}</span>
+            <label className="flex flex-col items-center justify-center gap-2 py-4 rounded-lg border border-dashed border-zinc-200 bg-zinc-50 hover:bg-zinc-100 hover:border-zinc-300 cursor-pointer transition-colors group">
+              <ImagePlus className="w-5 h-5 text-zinc-300 group-hover:text-zinc-500 transition-colors" />
+              <span className="text-xs text-zinc-300 group-hover:text-zinc-500 transition-colors text-center leading-tight px-2 truncate w-full text-center">
+                {coverImage ? coverImage.name : "Upload cover"}
+              </span>
               <input
                 type="file"
                 accept="image/*"
@@ -179,26 +212,58 @@ export default function Register() {
               />
             </label>
           </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-2 rounded-md bg-black text-white text-sm hover:bg-gray-800 cursor-pointer"
-          >
-            {loading ? "Registering..." : "Register"}
-          </button>
-        </form>
-
-        <div className="mt-6 text-center text-sm text-gray-600">
-          Already have an account?{" "}
-          <span
-            onClick={() => navigate("/login")}
-            className="text-blue-600 cursor-pointer hover:underline"
-          >
-            Login
-          </span>
         </div>
-      </div>
+
+        {/* Submit */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-zinc-900 text-white text-sm font-medium hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mt-1"
+        >
+          {loading ? (
+            <>
+              <svg
+                className="animate-spin w-4 h-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"
+                />
+              </svg>
+              Creating account…
+            </>
+          ) : (
+            <>
+              Create account
+              <ArrowRight className="w-4 h-4" />
+            </>
+          )}
+        </button>
+      </form>
+
+      <div className="my-7 border-t border-zinc-100" />
+
+      <p className="text-sm text-zinc-400 text-center">
+        Already have an account?{" "}
+        <button
+          onClick={() => navigate("/login")}
+          className="text-zinc-900 font-medium underline underline-offset-4 hover:text-zinc-600 transition-colors"
+        >
+          Sign in
+        </button>
+      </p>
     </div>
   );
 }
