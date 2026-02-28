@@ -34,7 +34,6 @@ export default function Register() {
     e.preventDefault();
     setFormError(null);
     dispatch(loginStart());
-
     try {
       const formData = new FormData();
       formData.append("fullName", fullName);
@@ -59,7 +58,6 @@ export default function Register() {
           accessToken,
         }),
       );
-
       navigate("/tenants/select");
     } catch (error) {
       const message =
@@ -72,22 +70,22 @@ export default function Register() {
   };
 
   const inputClass =
-    "w-full pl-10 pr-4 py-3 rounded-lg border border-zinc-200 bg-white text-sm text-zinc-900 placeholder:text-zinc-300 outline-none focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10 transition-colors";
+    "w-full pl-10 pr-4 py-3 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-900 placeholder:text-slate-300 outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 focus:bg-white transition-colors";
 
   const iconClass =
-    "absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-300 pointer-events-none";
+    "absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300 pointer-events-none";
 
   const labelClass =
-    "block text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-1.5";
+    "block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1.5";
 
   return (
     <div className="w-full">
       {/* Heading */}
       <div className="mb-8">
-        <p className="text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2">
+        <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">
           Get started
         </p>
-        <h1 className="text-3xl font-semibold text-zinc-900 tracking-tight">
+        <h1 className="text-3xl font-semibold text-slate-900 tracking-tight">
           Create account.
         </h1>
       </div>
@@ -166,7 +164,7 @@ export default function Register() {
           </div>
         </div>
 
-        {/* Avatar + Cover — side by side */}
+        {/* Avatar + Cover */}
         <div className="grid grid-cols-2 gap-3 pt-1">
           {/* Avatar */}
           <div>
@@ -176,9 +174,9 @@ export default function Register() {
                 *
               </span>
             </label>
-            <label className="flex flex-col items-center justify-center gap-2 py-4 rounded-lg border border-dashed border-zinc-300 bg-zinc-50 hover:bg-zinc-100 hover:border-zinc-400 cursor-pointer transition-colors group">
-              <Image className="w-5 h-5 text-zinc-400 group-hover:text-zinc-600 transition-colors" />
-              <span className="text-xs text-zinc-400 group-hover:text-zinc-600 transition-colors text-center leading-tight px-2 truncate w-full text-center">
+            <label className="flex flex-col items-center justify-center gap-2 py-4 rounded-lg border border-dashed border-slate-300 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-300 cursor-pointer transition-colors group">
+              <Image className="w-5 h-5 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+              <span className="text-xs text-slate-400 group-hover:text-indigo-500 transition-colors text-center leading-tight px-2 truncate w-full text-center">
                 {avatar ? avatar.name : "Upload avatar"}
               </span>
               <input
@@ -195,13 +193,13 @@ export default function Register() {
           <div>
             <label className={labelClass}>
               Cover{" "}
-              <span className="text-zinc-300 normal-case tracking-normal">
+              <span className="text-slate-300 normal-case tracking-normal">
                 (opt)
               </span>
             </label>
-            <label className="flex flex-col items-center justify-center gap-2 py-4 rounded-lg border border-dashed border-zinc-200 bg-zinc-50 hover:bg-zinc-100 hover:border-zinc-300 cursor-pointer transition-colors group">
-              <ImagePlus className="w-5 h-5 text-zinc-300 group-hover:text-zinc-500 transition-colors" />
-              <span className="text-xs text-zinc-300 group-hover:text-zinc-500 transition-colors text-center leading-tight px-2 truncate w-full text-center">
+            <label className="flex flex-col items-center justify-center gap-2 py-4 rounded-lg border border-dashed border-slate-200 bg-slate-50 hover:bg-slate-100 hover:border-slate-300 cursor-pointer transition-colors group">
+              <ImagePlus className="w-5 h-5 text-slate-300 group-hover:text-slate-500 transition-colors" />
+              <span className="text-xs text-slate-300 group-hover:text-slate-500 transition-colors text-center leading-tight px-2 truncate w-full text-center">
                 {coverImage ? coverImage.name : "Upload cover"}
               </span>
               <input
@@ -218,7 +216,7 @@ export default function Register() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-zinc-900 text-white text-sm font-medium hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mt-1"
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mt-1"
         >
           {loading ? (
             <>
@@ -253,13 +251,13 @@ export default function Register() {
         </button>
       </form>
 
-      <div className="my-7 border-t border-zinc-100" />
+      <div className="my-7 border-t border-slate-100" />
 
-      <p className="text-sm text-zinc-400 text-center">
+      <p className="text-sm text-slate-400 text-center">
         Already have an account?{" "}
         <button
           onClick={() => navigate("/login")}
-          className="text-zinc-900 font-medium underline underline-offset-4 hover:text-zinc-600 transition-colors"
+          className="text-indigo-600 font-medium underline underline-offset-4 hover:text-indigo-800 transition-colors"
         >
           Sign in
         </button>
