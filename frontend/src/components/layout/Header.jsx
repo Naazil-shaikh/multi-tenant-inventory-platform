@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Bell, ChevronDown, User, LogOut } from "lucide-react";
+import { logoutUser } from "../../api/user.api";
+import { logout } from "../../store/slices/authSlice";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -47,6 +49,16 @@ export default function Header() {
     .slice(0, 2)
     .join("")
     .toUpperCase();
+
+  const loggingOutUser = async () => {
+    try {
+      await logoutUser();
+      dispatch(logout());
+      console.log("Logged out successfully");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/90 border-b border-slate-200 shadow-sm">
@@ -179,6 +191,7 @@ export default function Header() {
 
                     <button
                       onClick={() => {
+                        loggingOutUser();
                         setOpenUser(false);
                         navigate("/login");
                       }}
