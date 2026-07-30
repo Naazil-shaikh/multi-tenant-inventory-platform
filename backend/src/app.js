@@ -61,8 +61,13 @@ import inventoryRouter from "./routes/inventory.routes.js";
 import inventoryTransactionRouter from "./routes/inventoryTransaction.routes.js";
 import inventoryAlertRouter from "./routes/inventoryAlert.routes.js";
 import dashboardRouter from "./routes/dashboard.routes.js";
+import aiRouter from "./routes/ai.routes.js";
+import testRouter from "./routes/test.routes.js";
 import debugRouter from "./routes/debug.routes.js";
 import { errorHandler } from "./middlewares/error.middleware.js";
+import { branchInventory } from "./services/branch.service.js";
+import { verifyJwt } from "./middlewares/auth.middleware.js";
+import { resolveTenantContext } from "./middlewares/tenantContext.middleware.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/tenants", tenantRouter);
@@ -74,7 +79,10 @@ app.use("/api/v1/inventory", inventoryRouter);
 app.use("/api/v1/inventory-transactions", inventoryTransactionRouter);
 app.use("/api/v1/inventory-alerts", inventoryAlertRouter);
 app.use("/api/v1/dashboard", dashboardRouter);
+app.use("/api/v1/ai", aiRouter);
+app.use("/api/v1/test", testRouter);
 app.use("/api/v1/debug", debugRouter);
+
 app.use(errorHandler);
 
 export { app };

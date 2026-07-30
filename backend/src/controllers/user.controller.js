@@ -18,6 +18,7 @@ const generateAccessAndRefreshToken = async (userId) => {
 
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
+    console.log(accessToken);
 
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
 
@@ -101,7 +102,7 @@ const registerUser = asyncHandler(async (req, res) => {
   if (!createdUser) {
     throw new ApiError(500, "Something went wrong while registering the user");
   }
-  console.log("FILES:", req.files);
+  // console.log("FILES:", req.files);
 
   return res
     .status(201)
@@ -200,6 +201,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
+  // console.log("REFRESH ENDPOINT HIT");
   const incomingRefreshToken =
     req.cookies.refreshToken || req.body.refreshToken;
   if (!incomingRefreshToken) {
@@ -231,6 +233,14 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     user._id
   );
+
+  // if (accessToken) {
+  //   console.log(
+  //     "New access token generated successfully",
+  //     "at",
+  //     new Date().toISOString()
+  //   );
+  // }
 
   return res
     .status(200)

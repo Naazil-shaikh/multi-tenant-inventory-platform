@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { Inventory } from "../models/inventory.model.js";
 import { getPaginationParams } from "../utils/pagination.js";
+// import { branchInventory } from "../services/";
 
 const listBranchInventory = asyncHandler(async (req, res) => {
   const tenantId = req.membership.tenantId;
@@ -28,6 +29,12 @@ const listBranchInventory = asyncHandler(async (req, res) => {
     // .populate("userId", "username email"),
     Inventory.countDocuments(filter),
   ]);
+
+  // const { inventory, total } = await branchInventory({
+  //   tenantId,
+  //   branchId,
+  //   filter,
+  // });
 
   return res.status(200).json(
     new ApiResponse(200, {
