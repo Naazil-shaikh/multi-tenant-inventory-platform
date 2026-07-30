@@ -23,11 +23,11 @@ router.post("/", verifyJwt, resolveTenantContext, async (req, res) => {
     //   productName: "Apple",
     // });
 
-    const updates = req.body;
-    const result = await updateProductByName({
+    const { branchName } = req.body;
+
+    const result = await branchInventory({
       tenantId: req.membership.tenantId,
-      productName: "Appl",
-      updates,
+      branchName,
     });
     // Appless
 
